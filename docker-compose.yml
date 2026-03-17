@@ -1,0 +1,21 @@
+services:
+  backend:
+    build: ./backend
+    container_name: mundodeporte-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./app/database/mundodeporte.db
+      - SECRET_KEY=desarrollo_secret_key_123 # Cambiar en producción
+    volumes:
+      - ./backend/app/database:/app/app/database # Persistencia para SQLite
+
+  frontend:
+    build: ./frontend
+    container_name: mundodeporte-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - backend

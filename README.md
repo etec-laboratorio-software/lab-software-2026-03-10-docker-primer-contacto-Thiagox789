@@ -12,6 +12,7 @@ Este repositorio contiene una aplicación de e-commerce full-stack llamada "Mund
   - [Configuración del Backend](#configuración-del-backend)
   - [Configuración del Frontend](#configuración-del-frontend)
 - [Ejecutando la Aplicación](#ejecutando-la-aplicación)
+- [Ejecución con Docker (Recomendado)](#ejecución-con-docker-recomendado)
 - [Endpoints de la API](#endpoints-de-la-api)
 - [Contribuciones](#contribuciones)
 - [Licencia](#licencia)
@@ -189,6 +190,26 @@ Abre otra terminal en la **carpeta raíz del proyecto**, es decir, la carpeta do
     npm run dev
     ```
     La aplicación del frontend estará disponible en `http://localhost:5173` (u otro puerto si el 5173 está en uso).
+
+## Ejecución con Docker (Recomendado)
+
+Si tienes instalado **Docker** y **Docker Compose**, esta es la forma más rápida y sencilla de poner en marcha todo el proyecto sin necesidad de instalar Python o Node.js manualmente.
+
+### Pasos rápidos:
+
+1.  Asegúrate de estar en la raíz del proyecto.
+2.  Ejecuta el siguiente comando para construir y levantar los contenedores:
+    ```bash
+    docker compose up --build
+    ```
+3.  ¡Listo! Ya puedes acceder a la aplicación:
+    -   **Frontend:** [http://localhost:5173](http://localhost:5173)
+    -   **Backend (Docs):** [http://localhost:8000/docs](http://localhost:8000/docs)
+
+### Detalles de la configuración Docker:
+-   **Base de datos:** Se utiliza un volumen para que la base de datos SQLite persista en `./backend/app/database/mundodeporte.db`. 
+-   **Puerto Frontend:** Mapeado al **5173** (puerto por defecto de Vite).
+-   **Entorno:** Los contenedores corren en modo desarrollo, permitiendo usar los servidores nativos de FastAPI y Vite.
 
 ## Ejecutando la Aplicación
 
