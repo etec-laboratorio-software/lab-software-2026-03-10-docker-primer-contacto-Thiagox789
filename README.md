@@ -61,7 +61,8 @@ Antes de instalar y ejecutar este proyecto, asegúrate de tener instalado lo sig
 ### Backend
 - **FastAPI:** Un framework web moderno y rápido (de alto rendimiento) para construir APIs con Python 3.7+ basado en las anotaciones de tipo estándar de Python.
 - **SQLAlchemy:** Un kit de herramientas SQL y Mapeador Objeto-Relacional (ORM) que brinda a los desarrolladores de aplicaciones todo el poder y la flexibilidad de SQL.
-- **SQLite:** Una biblioteca en lenguaje C que implementa un motor de base de datos SQL pequeño, rápido, autónomo, de alta fiabilidad y con todas las funciones.
+- **PostgreSQL:** Un sistema de gestión de bases de datos relacionales de objetos de código abierto potente y profesional (utilizado en el entorno Docker).
+- **SQLite:** Utilizado para desarrollo local rápido fuera de Docker.
 - **Uvicorn:** Un servidor ASGI para Python.
 - **Alembic:** Una herramienta de migración de bases de datos para SQLAlchemy.
 - **PyJWT:** Para la implementación de JSON Web Token (JWT) para autenticación.
@@ -193,7 +194,7 @@ Abre otra terminal en la **carpeta raíz del proyecto**, es decir, la carpeta do
 
 ## Ejecución con Docker (Recomendado)
 
-Si tienes instalado **Docker** y **Docker Compose**, esta es la forma más rápida y sencilla de poner en marcha todo el proyecto sin necesidad de instalar Python o Node.js manualmente.
+Esta es la forma más rápida y robusta de poner en marcha todo el proyecto. Se utiliza un entorno orquestado con **Docker Compose** que incluye el frontend (Nginx), el backend (FastAPI) y la base de datos (PostgreSQL).
 
 ### Pasos rápidos:
 
@@ -202,14 +203,18 @@ Si tienes instalado **Docker** y **Docker Compose**, esta es la forma más rápi
     ```bash
     docker compose up --build
     ```
-3.  ¡Listo! Ya puedes acceder a la aplicación:
-    -   **Frontend:** [http://localhost:5173](http://localhost:5173)
-    -   **Backend (Docs):** [http://localhost:8000/docs](http://localhost:8000/docs)
+    *Nota: Si recibes un error de `permission denied` al conectar al socket de Docker, intenta usar `sudo docker compose up --build` o [agrega tu usuario al grupo docker](https://docs.docker.com/engine/install/linux-postinstall/).*
 
-### Detalles de la configuración Docker:
--   **Base de datos:** Se utiliza un volumen para que la base de datos SQLite persista en `./backend/app/database/mundodeporte.db`. 
--   **Puerto Frontend:** Mapeado al **5173** (puerto por defecto de Vite).
--   **Entorno:** Los contenedores corren en modo desarrollo, permitiendo usar los servidores nativos de FastAPI y Vite.
+3.  ¡Listo! Ya puedes acceder a la aplicación:
+    -   **Frontend:** [http://localhost](http://localhost) (Puerto 80)
+    -   **Backend (Docs):** [http://localhost/api/docs](http://localhost/api/docs)
+    -   **API Base:** [http://localhost/api/](http://localhost/api/)
+
+### Detalles de la arquitectura Docker:
+-   **Frontend:** Se compila la aplicación Vite y se sirve mediante **Nginx**. Este contenedor también actúa como **Proxy Inverso**, redirigiendo las peticiones de `/api/*` al contenedor del backend.
+-   **Backend:** Ejecuta FastAPI de forma aislada, comunicándose con la base de datos por la red interna de Docker.
+-   **Base de datos:** Utiliza **PostgreSQL 15**. Los datos persisten en un volumen de Docker llamado `db_data`.
+-   **Puerto único:** Todo el sistema se expone únicamente a través del **puerto 80**.
 
 ## Ejecutando la Aplicación
 
