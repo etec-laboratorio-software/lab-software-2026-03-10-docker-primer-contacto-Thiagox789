@@ -7,11 +7,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Configuración de la URL de la base de datos SQLite.
+# Configuración de la URL de la base de datos.
 SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
 
-# `connect_args` es necesario para SQLite.
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+# `connect_args` es necesario únicamente para SQLite.
+if SQLALCHEMY_DATABASE_URL and SQLALCHEMY_DATABASE_URL.startswith("sqlite"):
+    engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+else:
+    engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
 # `sessionmaker` es una clase que nos permite crear sesiones de base de datos.
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

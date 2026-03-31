@@ -1,21 +1,39 @@
 services:
+  db:
+    image: postgres:15-alpine
+    container_name: mundodeporte-db
+    environment:
+      - POSTGRES_USER=usuario_md
+      - POSTGRES_PASSWORD=password_seguro_123
+      - POSTGRES_DB=mundodeporte
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U usuario_md -d mundodeporte"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   backend:
     build: ./backend
     container_name: mundodeporte-backend
-    ports:
-      - "8000:8000"
     environment:
-      - DATABASE_URL=sqlite:///./app/database/mundodeporte.db
-      - SECRET_KEY=desarrollo_secret_key_123 # Cambiar en producción
-    volumes:
-      - ./backend/app/database:/app/app/database # Persistencia para SQLite
+      - DATABASE_URL=postgresql://usuario_md:password_seguro_123@db:5432/mundodeporte
+      - SECRET_KEY=desarrollo_secret_key_123
+    depends_on:
+      db:
+        condition: service_healthy
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        - VITE_API_URL=/api
     container_name: mundodeporte-frontend
     ports:
-      - "5173:5173"
-    environment:
-      - VITE_API_URL=http://localhost:8000
+      - "80:80"
     depends_on:
       - backend
+
+volumes:
+  db_data:
