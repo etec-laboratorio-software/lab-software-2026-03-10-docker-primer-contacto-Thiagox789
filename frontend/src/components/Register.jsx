@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import './AuthForms.css'; // Import the new CSS file
 
 const Register = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: '',
         password: '',
