@@ -16,7 +16,7 @@ function Carrito() {
           return;
         }
 
-        const items = cartState.items.map(item => ({
+        const items = (cartState?.items || []).map(item => ({
           producto_id: item.product.id_producto || item.product.id,
           cantidad: item.quantity
         }));
@@ -50,7 +50,7 @@ function Carrito() {
   };
 
   const calculateTotal = () => {
-    return cartState.items.reduce(
+    return (cartState?.items || []).reduce(
       (total, item) => total + item.product.precio_producto * item.quantity,
       0
     ).toFixed(2);
@@ -59,7 +59,7 @@ function Carrito() {
   return (
     <div className="container cart-container">
       <h1>Tu Carrito de Compras</h1>
-      {cartState.items.length === 0 ? (
+      {!cartState?.items || cartState.items.length === 0 ? (
         <p>El carrito está vacío.</p>
       ) : (
         <div className="cart-items">

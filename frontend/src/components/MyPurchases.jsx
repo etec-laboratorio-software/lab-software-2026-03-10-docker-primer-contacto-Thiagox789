@@ -41,7 +41,7 @@ const MyPurchases = () => {
   return (
     <div className="container my-purchases">
       <h1>Mis compras</h1>
-      {purchases.length === 0 ? (
+      {!purchases || purchases.length === 0 ? (
         <p>No tienes compras aún.</p>
       ) : (
         <div className="purchases-list">

@@ -26,7 +26,7 @@ function Productos() {
     <div className="container">
       <h1>Nuestros Productos</h1>
       <div className="products-container">
-        {products.map(product => (
+        {(products || []).map(product => (
           <ProductCard key={product.id_producto} product={product} />
         ))}
       </div>

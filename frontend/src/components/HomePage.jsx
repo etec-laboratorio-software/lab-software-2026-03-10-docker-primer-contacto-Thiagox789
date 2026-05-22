@@ -72,7 +72,7 @@ const HomePage = () => {
         <div className="loading-spinner"></div>
       ) : (
         <div className="product-list">
-          {products.length > 0 ? (
+          {(products?.length || 0) > 0 ? (
             products.map((product) => (
               <ProductCard key={product.id_producto} product={product} />
             ))
